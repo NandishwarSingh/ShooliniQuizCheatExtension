@@ -1,0 +1,11 @@
+{
+    "manifest_version": 3,
+    "name": "I Hate Exams",
+    "version": "1.0",
+    "content_scripts": [
+      {
+        "matches": ["https://shoolini.euniv.in/mod/quiz/*"],  
+        "js": ["content.js"]
+      }
+    ]
+  }
