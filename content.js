@@ -1,5 +1,5 @@
 //code to answer the question
-const key = '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';
+const key = '//paste you open ai api key here//';
 const element = document.querySelector('.qtext');
 const input = element.innerHTML + ". Answer in one line"
 const getChatResponse = async () =>{
