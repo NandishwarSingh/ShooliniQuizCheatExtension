@@ -1,34 +1,35 @@
-//code to answer the question
-const key = '//paste you open ai api key here//';
-const element = document.querySelector('.qtext');
-const input = element.innerHTML + ". Answer in one line"
-const getChatResponse = async () =>{
+const element = document.getElementsByClassName("noselect ng-binding")[0];
+const question = element.innerText + 
+  " a) " + document.getElementsByClassName("noselect ng-binding")[1].innerText +
+  " b) " + document.getElementsByClassName("noselect ng-binding")[2].innerText +
+  " c) " + document.getElementsByClassName("noselect ng-binding")[3].innerText +
+  " d) " + document.getElementsByClassName("noselect ng-binding")[4].innerText +
+  ". Choose the correct option from a, b, c, or d and answer in one character";
 
-const API_URL ="https://api.openai.com/v1/chat/completions";
-
-
-const requestOptions  = {
-method: "POST",
-headers : {
-"Content-Type":"application/json",
-"Authorization":`Bearer ${key}`
-
-},
-body: JSON.stringify({
-
-"model": "gpt-3.5-turbo",
-     "messages": [{"role": "user", "content": input }],
-     "temperature": 0.2
+// Append the question text and send it to the API
+fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyALui4lY8epByWiGXqIOUCENR5sTblzvPY', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    contents: [
+      {
+        parts: [
+          {
+            text: question
+          }
+        ]
+      }
+    ]
+  })
 })
-}
-try{
-const output = await(await fetch(API_URL,requestOptions)).json();
-console.log(output);
-const newQtext = element.innerHTML +"("+(output.choices[0].message.content)+")";
-element.innerHTML = newQtext;}
-catch(error){
-console.log(error);
-}
-}
-
-getChatResponse();
+.then(response => response.json())
+.then(data => {
+  // Extract the answer from the API response and append it to the question
+  const answer = data.candidates[0].content.parts[0].text;
+  const finalOutput = question + "\n\nAnswer: " + answer;
+  document.getElementsByClassName("noselect ng-binding")[0].innerText=document.getElementsByClassName("noselect ng-binding")[0].innerText+` ${answer}`;
+  console.log(finalOutput); // Log the combined question and answer
+})
+.catch(error => console.error('Error:', error));
